@@ -1,0 +1,23 @@
+{
+    "development": {
+        "uri": "mongodb://127.0.0.1:27017/pethome",
+        "options": {
+            "useNewUrlParser": true,
+            "useUnifiedTopology": true
+        }
+    },
+    "test": {
+        "uri": "mongodb://127.0.0.1:27017/pethome_test",
+        "options": {
+            "useNewUrlParser": true,
+            "useUnifiedTopology": true
+        }
+    },
+    "production": {
+        "uri": "mongodb://127.0.0.1:27017/pethome_prod",
+        "options": {
+            "useNewUrlParser": true,
+            "useUnifiedTopology": true
+        }
+    }
+}
