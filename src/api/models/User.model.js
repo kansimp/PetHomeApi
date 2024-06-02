@@ -1,16 +1,5 @@
 const mongoose = require('mongoose');
-
-const addressSchema = new mongoose.Schema({
-    street: {
-        type: String,
-    },
-    district: {
-        type: String,
-    },
-    city: {
-        type: String,
-    },
-});
+import _Address from './Address.model';
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -22,16 +11,18 @@ const userSchema = new mongoose.Schema({
         require: true,
     },
     address: {
-        type: addressSchema,
+        type: _Address.schema,
         default: {},
     },
     email: {
         type: String,
         require: true,
+        unique: true,
     },
     phone: {
         type: String,
         require: true,
+        unique: true,
     },
     password: {
         type: String,
@@ -52,6 +43,10 @@ const userSchema = new mongoose.Schema({
     isWorking: {
         type: Boolean,
         default: false,
+    },
+    orders: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
+        default: [],
     },
 });
 
