@@ -3,6 +3,7 @@ import _Otp from '../models/Otp.model';
 import otpGenerator from 'otp-generator';
 import bcrypt from 'bcryptjs';
 import nodemailer from 'nodemailer';
+import { createAccessToken, createRefreshToken } from '../services/jwtService';
 
 const isEmailExist = async (email) => {
     const user = await _User.findOne({ email });
@@ -33,11 +34,45 @@ const sendOtp = async (email, otp) => {
     });
 
     await transporter.sendMail({
-        from: '"khoa dz" <duykhoa21062003@gmail.com>',
+        from: '"PetHome Support" <duykhoa21062003@gmail.com>',
         to: email,
-        subject: 'verify to register accout',
-        text: `your otp is ${otp}`,
-        // html: '<b>Hello world?</b>', // html body
+        subject: 'verify to register account',
+        html: `
+        <div style="width:100%">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td align="center">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="775" style="background-color: #212429; padding: 80px; box-sizing: border-box;">
+                            <tr>
+                                <td style="padding-bottom: 45px;">
+                                    <img
+                                        style="width: 88px; height: 88px; border-radius: 999px;"
+                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzueDSm5pTF-duOUmKLMPQPQECmrEFcP2uSg&s"
+                                        alt=""
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" style="font-size: 36px; line-height: 42px; font-family: Arial, sans-serif, 'Motiva Sans'; color: #bfbfbf; font-weight: bold;">
+                                    Hello,
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" style="font-size: 28px; line-height: 36px; font-family: Arial, sans-serif, 'Motiva Sans'; color: #ffffff; font-weight: bold; padding-top: 30px;padding-bottom: 30px">
+                                    Here's the confirmation code that you need to register your account:
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="background-color: #17191c; padding: 30px 56px; box-sizing: border-box; font-size: 48px; line-height: 52px; font-family: Arial, sans-serif, 'Motiva Sans'; color: #3a9aed; font-weight: bold; text-align: center">
+                                    ${otp}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        `, // html body
     });
 };
 const createUser = async (user) => {
@@ -101,7 +136,7 @@ const verifyOtp = async (data) => {
                 });
                 return {
                     status: 'success',
-                    message: 'register success',
+                    message: 'Register success !',
                     data: '',
                 };
             }
@@ -120,7 +155,56 @@ const verifyOtp = async (data) => {
     }
 };
 
+const checkUserExist = async (email) => {
+    try {
+        const user = await _User.findOne({ email });
+        return user;
+    } catch (error) {
+        console.log(error);
+        return;
+    }
+};
+
+const loginUser = async (data) => {
+    try {
+        const user = await checkUserExist(data.email);
+
+        if (user) {
+            const payload = {
+                email: user.email,
+                role: user.role,
+            };
+
+            const accessToken = createAccessToken(payload);
+            const refreshToken = createRefreshToken(payload);
+            const checkPassword = await bcrypt.compare(data.password, user.password);
+            if (checkPassword) {
+                return {
+                    status: 'success',
+                    message: 'Login success !',
+                    data: {
+                        access_token: accessToken,
+                        refresh_token: refreshToken,
+                    },
+                };
+            }
+        }
+        return {
+            status: 'error',
+            message: 'email or password was wrong',
+            data: '',
+        };
+    } catch (error) {
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
+
 module.exports = {
     createUser,
     verifyOtp,
+    loginUser,
 };
