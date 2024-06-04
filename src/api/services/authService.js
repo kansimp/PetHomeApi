@@ -183,6 +183,8 @@ const loginUser = async (data) => {
                     status: 'success',
                     message: 'Login success !',
                     data: {
+                        email: user.email,
+                        name: user.name,
                         access_token: accessToken,
                         refresh_token: refreshToken,
                     },
