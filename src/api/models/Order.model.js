@@ -4,6 +4,7 @@ import _Address from './Address.model';
 const orderSchema = new mongoose.Schema({
     dateOrder: {
         type: Date,
+        default: Date.now,
     },
     totalPrice: {
         type: Number,
