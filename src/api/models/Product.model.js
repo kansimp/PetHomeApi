@@ -27,8 +27,8 @@ const productSchema = new mongoose.Schema({
         require: true,
     },
     status: {
-        type: String,
-        default: 'còn hàng',
+        type: Number,
+        default: 1,
     },
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'ProductCategory' },
 });
