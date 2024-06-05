@@ -4,10 +4,24 @@ import _ProductCategory from '../models/ProductCategory.model';
 const getProductsByCategory = async (data) => {
     try {
         const { name, species, type } = data;
-        const category = await _ProductCategory.findOne({ name, species });
-        const products = await _Product
-            .find({ category: category._id, type })
-            .select('_id name image des price quantity status');
+        let products = [];
+        let category = [];
+        let categoryId = [];
+        if (!name && !species) {
+            products = await _Product.find({ type }).select('_id name image des price quantity status');
+        } else if (!name) {
+            category = await _ProductCategory.find({ species });
+            categoryId = category.map((c) => c._id);
+            products = await _Product
+                .find({ category: { $in: categoryId }, type })
+                .select('_id name image des price quantity status');
+        } else {
+            category = await _ProductCategory.findOne({ name, species });
+            products = await _Product
+                .find({ category: category._id, type })
+                .select('_id name image des price quantity status');
+        }
+
         if (products.length > 0) {
             return {
                 status: 'success',
@@ -21,6 +35,7 @@ const getProductsByCategory = async (data) => {
             data: [],
         };
     } catch (error) {
+        console.log(error);
         return {
             status: 'error',
             message: 'something was wrong in service',
@@ -31,7 +46,6 @@ const getProductsByCategory = async (data) => {
 const getProductsAndSortByPrice = async (data) => {
     try {
         const { name, species, type, sort } = data;
-        const category = await _ProductCategory.findOne({ name, species });
         let sortValue = 0;
         if (sort == 'asc') {
             sortValue = 1;
@@ -39,10 +53,30 @@ const getProductsAndSortByPrice = async (data) => {
         if (sort == 'desc') {
             sortValue = -1;
         }
-        const products = await _Product
-            .find({ category: category._id, type })
-            .select('_id name image des price quantity status')
-            .sort({ price: sortValue });
+
+        let products = [];
+        let category = [];
+        let categoryId = [];
+        if (!name && !species) {
+            products = await _Product
+                .find({ type })
+                .select('_id name image des price quantity status')
+                .sort({ price: sortValue });
+        } else if (!name) {
+            category = await _ProductCategory.find({ species });
+            categoryId = category.map((c) => c._id);
+            products = await _Product
+                .find({ category: { $in: categoryId }, type })
+                .select('_id name image des price quantity status')
+                .sort({ price: sortValue });
+        } else {
+            category = await _ProductCategory.findOne({ name, species });
+            products = await _Product
+                .find({ category: category._id, type })
+                .select('_id name image des price quantity status')
+                .sort({ price: sortValue });
+        }
+
         if (products.length > 0) {
             return {
                 status: 'success',
@@ -86,9 +120,36 @@ const getProductsById = async (id) => {
         };
     }
 };
+const getProductsByName = async (data) => {
+    try {
+        const { name, type } = data;
+        const product = await _Product
+            .find({ name: { $regex: name, $options: 'i' }, type })
+            .select('_id name image des price quantity status');
+        if (product) {
+            return {
+                status: 'success',
+                message: 'get product detail success !',
+                data: product,
+            };
+        }
+        return {
+            status: 'success',
+            message: 'not found product',
+            data: [],
+        };
+    } catch (error) {
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
 
 module.exports = {
     getProductsByCategory,
     getProductsById,
     getProductsAndSortByPrice,
+    getProductsByName,
 };
