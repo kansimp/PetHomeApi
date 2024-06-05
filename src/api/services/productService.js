@@ -28,6 +28,41 @@ const getProductsByCategory = async (data) => {
         };
     }
 };
+const getProductsAndSortByPrice = async (data) => {
+    try {
+        const { name, species, type, sort } = data;
+        const category = await _ProductCategory.findOne({ name, species });
+        let sortValue = 0;
+        if (sort == 'asc') {
+            sortValue = 1;
+        }
+        if (sort == 'desc') {
+            sortValue = -1;
+        }
+        const products = await _Product
+            .find({ category: category._id, type })
+            .select('_id name image des price quantity status')
+            .sort({ price: sortValue });
+        if (products.length > 0) {
+            return {
+                status: 'success',
+                message: 'get list products success !',
+                data: products,
+            };
+        }
+        return {
+            status: 'success',
+            message: 'There are not any products',
+            data: [],
+        };
+    } catch (error) {
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
 const getProductsById = async (id) => {
     try {
         const product = await _Product.find({ _id: id }).select('_id name image des price quantity status');
@@ -55,4 +90,5 @@ const getProductsById = async (id) => {
 module.exports = {
     getProductsByCategory,
     getProductsById,
+    getProductsAndSortByPrice,
 };
