@@ -123,15 +123,28 @@ const getProductsById = async (id) => {
 const getProductsByName = async (data) => {
     try {
         const { name, type } = data;
-        const product = await _Product
-            .find({ name: { $regex: name, $options: 'i' }, type })
-            .select('_id name image des price quantity status');
-        if (product) {
-            return {
-                status: 'success',
-                message: 'get product detail success !',
-                data: product,
-            };
+        if (type) {
+            const product = await _Product
+                .find({ name: { $regex: name, $options: 'i' }, type })
+                .select('_id name image des price quantity status');
+            if (product) {
+                return {
+                    status: 'success',
+                    message: 'get product detail success !',
+                    data: product,
+                };
+            }
+        } else {
+            const product = await _Product
+                .find({ name: { $regex: name, $options: 'i' } })
+                .select('_id name image des price quantity status');
+            if (product) {
+                return {
+                    status: 'success',
+                    message: 'get product detail success !',
+                    data: product,
+                };
+            }
         }
         return {
             status: 'success',
@@ -147,9 +160,19 @@ const getProductsByName = async (data) => {
     }
 };
 
+const getPriceByProductId = async (id) => {
+    try {
+        const product = await _Product.findOne({ _id: id });
+        return product.price;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 module.exports = {
     getProductsByCategory,
     getProductsById,
     getProductsAndSortByPrice,
     getProductsByName,
+    getPriceByProductId,
 };
