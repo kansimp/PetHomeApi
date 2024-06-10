@@ -36,7 +36,7 @@ const sendOtp = async (email, otp) => {
     await transporter.sendMail({
         from: '"PetHome Support" <duykhoa21062003@gmail.com>',
         to: email,
-        subject: 'verify to register account',
+        subject: 'Xác minh OTP để đăng ký tài khoản',
         html: `
         <div style="width:100%">
             <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -54,12 +54,12 @@ const sendOtp = async (email, otp) => {
                             </tr>
                             <tr>
                                 <td align="left" style="font-size: 36px; line-height: 42px; font-family: Arial, sans-serif, 'Motiva Sans'; color: #bfbfbf; font-weight: bold;">
-                                    Hello,
+                                    Xin chào,
                                 </td>
                             </tr>
                             <tr>
                                 <td align="left" style="font-size: 28px; line-height: 36px; font-family: Arial, sans-serif, 'Motiva Sans'; color: #ffffff; font-weight: bold; padding-top: 30px;padding-bottom: 30px">
-                                    Here's the confirmation code that you need to register your account:
+                                    Đây là mã xác nhận mà bạn cần để đăng ký tài khoản của mình:
                                 </td>
                             </tr>
                             <tr>
