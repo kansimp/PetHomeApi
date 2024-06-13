@@ -185,6 +185,7 @@ const loginUser = async (data) => {
                     data: {
                         email: user.email,
                         name: user.name,
+                        id: user._id,
                         access_token: accessToken,
                         refresh_token: refreshToken,
                     },

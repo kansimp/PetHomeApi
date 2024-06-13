@@ -1,11 +1,26 @@
 import _Order from '../models/Order.model';
+import _Product from '../models/Product.model';
 import _User from '../models/User.model';
 import { getPriceByProductId } from './productService';
 import nodemailer from 'nodemailer';
 
+const updateQuatityProducts = async (cartDetails) => {
+    for (let item of cartDetails) {
+        let product = await _Product.findOneAndUpdate(
+            { _id: item.productId },
+            { $inc: { quantity: -item.quantity } },
+            { new: true },
+        );
+        if (product.quantity <= 0) {
+            await _Product.findByIdAndUpdate(product._id, { status: 'out of stock' });
+        }
+    }
+};
+
 const createOrder = async (data) => {
     try {
         const { userId, addressShipping, paymentMethod, cartDetails } = data;
+        await updateQuatityProducts(cartDetails);
         const orderDetails = await Promise.all(
             cartDetails.map(async (cartDetail) => {
                 let price = await getPriceByProductId(cartDetail.productId);
@@ -79,7 +94,7 @@ const cancelOrder = async (data) => {
                 return {
                     status: 'success',
                     message: 'Cancel order success !',
-                    data: newOrder,
+                    data: '',
                 };
             }
         }
@@ -116,8 +131,8 @@ const confirmOrder = async (data) => {
                 await sendOrderEmail(listOrder, user);
                 return {
                     status: 'success',
-                    message: 'Confirm order success !',
-                    data: newOrder,
+                    message: 'Confirm order success please check mail to verify !',
+                    data: '',
                 };
             }
         }
