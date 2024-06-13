@@ -27,8 +27,8 @@ const productSchema = new mongoose.Schema({
         require: true,
     },
     status: {
-        type: Number,
-        default: 1,
+        type: String,
+        default: 'In stock',
     },
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'ProductCategory' },
 });
