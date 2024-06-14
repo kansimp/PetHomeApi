@@ -99,7 +99,7 @@ const getProductsAndSortByPrice = async (data) => {
 };
 const getProductsById = async (id) => {
     try {
-        const product = await _Product.find({ _id: id }).select('_id name image des price quantity status');
+        const product = await _Product.findOne({ _id: id }).select('_id name image des price quantity status');
         if (product) {
             return {
                 status: 'success',
