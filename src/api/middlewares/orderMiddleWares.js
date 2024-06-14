@@ -18,7 +18,7 @@ const checkQuantityOrder = async (req, res, next) => {
         console.log(error);
         return res.status(401).json({
             status: 'error',
-            message: 'loi checkQuantityOrder',
+            message: 'error checkQuantityOrder',
             data: '',
         });
     }
