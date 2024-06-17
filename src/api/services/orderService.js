@@ -68,7 +68,7 @@ const createOrder = async (data) => {
         return {
             status: 'error',
             message: 'Order created fail !',
-            data: order,
+            data: '',
         };
     } catch (error) {
         console.log(error);

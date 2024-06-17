@@ -4,7 +4,6 @@ const checkPermissionUser = (permission) => {
     try {
         return (req, res, next) => {
             const role = req.role;
-
             if (!role) {
                 return res.status(401).json({
                     status: 'error',

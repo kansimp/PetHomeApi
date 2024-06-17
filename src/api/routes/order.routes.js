@@ -3,6 +3,7 @@ import { checkUserAuth, checkPermissionUser } from '../middlewares/jwtMiddleWare
 import orderController from '../controllers/orderController';
 import { checkQuantityOrder } from '../middlewares/orderMiddleWares';
 import { validateCreateOrder } from '../validations/validateOrder';
+
 const router = express.Router();
 
 router.post(
