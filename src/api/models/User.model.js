@@ -48,6 +48,10 @@ const userSchema = new mongoose.Schema({
         type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
         default: [],
     },
+    pets: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Pet' }],
+        default: [],
+    },
 });
 
 const _User = mongoose.model('User', userSchema);
