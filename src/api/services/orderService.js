@@ -151,6 +151,36 @@ const confirmOrder = async (data) => {
         };
     }
 };
+const getOrder = async (data) => {
+    try {
+        const { status } = data;
+        const orders = await _Order.find({ status }).populate({
+            path: 'orderDetails',
+            populate: {
+                path: 'product',
+            },
+        });
+        if (orders) {
+            return {
+                status: 'success',
+                message: 'get list order success !',
+                data: orders,
+            };
+        }
+        return {
+            status: 'error',
+            message: 'get list order fail !',
+            data: '',
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
 
 const sendOrderEmail = async (order, user) => {
     const transporter = nodemailer.createTransport({
@@ -290,4 +320,5 @@ module.exports = {
     createOrder,
     cancelOrder,
     confirmOrder,
+    getOrder,
 };

@@ -36,6 +36,10 @@ const petSchema = new mongoose.Schema({
         type: Number,
         require: true,
     },
+    serviceRecords: {
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ServiceRecords' }],
+        default: [],
+    },
 });
 
 const _Pet = mongoose.model('Pet', petSchema);
