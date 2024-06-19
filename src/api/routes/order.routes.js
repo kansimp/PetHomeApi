@@ -16,5 +16,6 @@ router.post(
 );
 router.post('/orders/cancel', checkUserAuth, checkPermissionUser(['CUSTOMER', 'STAFF']), orderController.cancelOrder);
 router.post('/orders/confirm', checkUserAuth, checkPermissionUser(['STAFF']), orderController.confirmOrder);
+router.get('/orders', checkUserAuth, checkPermissionUser(['STAFF']), orderController.getOrder);
 
 export default router;

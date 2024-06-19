@@ -4,6 +4,7 @@ import authRoutes from './auth.routes';
 import productRoutes from './product.routes';
 import orderRoutes from './order.routes';
 import petRoutes from './pet.routes';
+import serviceRoutes from './service.routes';
 
 const router = express.Router();
 
@@ -13,6 +14,7 @@ const apiRoutes = (app) => {
     router.use(productRoutes);
     router.use(orderRoutes);
     router.use(petRoutes);
+    router.use(serviceRoutes);
 
     app.use('/api/v1', router);
     app.use((req, res, next) => {
