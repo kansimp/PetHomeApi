@@ -5,6 +5,7 @@ import productRoutes from './product.routes';
 import orderRoutes from './order.routes';
 import petRoutes from './pet.routes';
 import serviceRoutes from './service.routes';
+import cageRoutes from './cage.routes';
 
 const router = express.Router();
 
@@ -15,6 +16,7 @@ const apiRoutes = (app) => {
     router.use(orderRoutes);
     router.use(petRoutes);
     router.use(serviceRoutes);
+    router.use(cageRoutes);
 
     app.use('/api/v1', router);
     app.use((req, res, next) => {
