@@ -181,6 +181,38 @@ const getOrder = async (data) => {
         };
     }
 };
+const getOrderHistory = async (data) => {
+    try {
+        const { userId } = data;
+        const user = await _User.findOne({ _id: userId });
+        const listOrders = user.orders;
+        const orders = await _Order.find({ _id: { $in: listOrders } }).populate({
+            path: 'orderDetails',
+            populate: {
+                path: 'product',
+            },
+        });
+        if (orders) {
+            return {
+                status: 'success',
+                message: 'get list order success !',
+                data: orders,
+            };
+        }
+        return {
+            status: 'error',
+            message: 'get list order fail !',
+            data: '',
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
 
 const sendOrderEmail = async (order, user) => {
     const transporter = nodemailer.createTransport({
@@ -321,4 +353,5 @@ module.exports = {
     cancelOrder,
     confirmOrder,
     getOrder,
+    getOrderHistory,
 };
