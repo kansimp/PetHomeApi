@@ -9,6 +9,10 @@ const serviceRecordsSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
+    price: {
+        type: Number,
+        required: true,
+    },
 
     status: {
         type: String,
