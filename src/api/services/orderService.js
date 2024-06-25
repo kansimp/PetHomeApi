@@ -58,12 +58,14 @@ const createOrder = async (data) => {
             });
         }
         if (order._id) {
-            await _User.findByIdAndUpdate(userId, { $push: { orders: order._id } });
-            return {
-                status: 'success',
-                message: 'Order created successfully !',
-                data: order,
-            };
+            const userUpdate = await _User.findByIdAndUpdate(userId, { $push: { orders: order._id } });
+            if (userUpdate) {
+                return {
+                    status: 'success',
+                    message: 'Order created successfully !',
+                    data: order,
+                };
+            }
         }
         return {
             status: 'error',

@@ -223,7 +223,7 @@ const sendBookingEmail = async (booking, user, pet) => {
                 <div style="font-size: 20px; font-weight: 600; margin-bottom: 25px; color: #000000;">Thông tin khách hàng</div>
                 <table style="width: 100%;">
                     <tr>
-                        <td style="vertical-align: top; padding-right: 20px;">
+                        <td style="vertical-align: top; padding-right: 200px;">
                             <div style="font-size: 18px; font-weight: 600; margin-bottom: 15px; color: #000000;">Thông tin thú cưng</div>
                             <div style="font-size: 16px; font-weight: 600; line-height: 1.4; color: #555;">
                                 Tên: ${pet.name}
