@@ -5,6 +5,8 @@ import serviceRecordController from '../controllers/serviceRecordController';
 const router = express.Router();
 
 router.post('/service', checkUserAuth, checkPermissionUser(['CUSTOMER']), serviceRecordController.createServiceRecord);
+router.get('/service', checkUserAuth, checkPermissionUser(['STAFF']), serviceRecordController.getAllServiceRecord);
+
 router.post(
     '/service/confirm',
     checkUserAuth,
@@ -16,6 +18,12 @@ router.post(
     checkUserAuth,
     checkPermissionUser(['CUSTOMER,"STAFF']),
     serviceRecordController.cancelServiceRecord,
+);
+router.get(
+    '/service/:id',
+    checkUserAuth,
+    checkPermissionUser(['STAFF']),
+    serviceRecordController.getDetailServiceRecord,
 );
 
 export default router;
