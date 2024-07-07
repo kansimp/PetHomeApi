@@ -57,7 +57,13 @@ const cancelServiceRecord = async (data) => {
         const { serviceRecordId, reason } = data;
         const serviceRecord = await _ServiceRecords.findOne({ _id: serviceRecordId });
         if (serviceRecord && serviceRecord.status === 'Processing') {
+            const pet = await _Pet.findOne({ serviceRecords: serviceRecord._id });
+            if (pet) {
+                pet.serviceStatus = 'inactive';
+                await pet.save();
+            }
             serviceRecord.status = 'Cancelled';
+            serviceRecord.cage = null;
             serviceRecord.cancellation = {
                 date: Date.now(),
                 reason,
@@ -259,9 +265,71 @@ const sendBookingEmail = async (booking, user, pet) => {
 `,
     });
 };
+const getAllServiceRecord = async (data) => {
+    try {
+        const bookingServices = await _ServiceRecords.find({}).populate('product');
+        if (bookingServices) {
+            return {
+                status: 'success',
+                message: 'Get all booking service successfully !',
+                data: bookingServices,
+            };
+        }
+        return {
+            status: 'error',
+            message: 'Cancel service fail !',
+            data: '',
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
+const getDetailServiceRecord = async (data) => {
+    try {
+        const { id } = data;
+        const bookingService = await _ServiceRecords.findOne({ _id: id }).populate('product cage');
+        if (bookingService) {
+            const pet = await _Pet.findOne({ serviceRecords: bookingService._id });
+            if (pet) {
+                const user = await _User.findOne({ pets: pet._id });
+                if (user) {
+                    return {
+                        status: 'success',
+                        message: 'Get booking service detail successfully !',
+                        data: {
+                            bookingService: bookingService,
+                            pet,
+                            user,
+                        },
+                    };
+                }
+            }
+        }
+
+        return {
+            status: 'error',
+            message: 'Cancel service fail !',
+            data: '',
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
 
 module.exports = {
     createServiceRecord,
     cancelServiceRecord,
     confirmServiceRecord,
+    getAllServiceRecord,
+    getDetailServiceRecord,
 };

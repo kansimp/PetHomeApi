@@ -22,7 +22,6 @@ const getEmptyCage = async (data) => {
                     },
                 ],
             });
-            console.log('booking', bookings);
 
             if (bookings) {
                 const bookedCages = bookings.map((booking) => booking.cage);
