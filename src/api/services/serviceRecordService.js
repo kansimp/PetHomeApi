@@ -92,6 +92,46 @@ const cancelServiceRecord = async (data) => {
         };
     }
 };
+const staffCancelServiceRecord = async (data) => {
+    try {
+        const { serviceRecordId, reason } = data;
+        const serviceRecord = await _ServiceRecords.findOne({ _id: serviceRecordId });
+        if (serviceRecord.status === 'Processing' || serviceRecord.status === 'Processed') {
+            const pet = await _Pet.findOne({ serviceRecords: serviceRecord._id });
+            if (pet) {
+                pet.serviceStatus = 'inactive';
+                await pet.save();
+            }
+            serviceRecord.status = 'Cancelled';
+            serviceRecord.cage = null;
+            serviceRecord.cancellation = {
+                date: Date.now(),
+                reason,
+            };
+            const newserviceRecord = await serviceRecord.save();
+            if (newserviceRecord) {
+                return {
+                    status: 'success',
+                    message: 'Cancel service success !',
+                    data: '',
+                };
+            }
+        }
+
+        return {
+            status: 'error',
+            message: 'Cancel service fail !',
+            data: '',
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
 const confirmServiceRecord = async (data) => {
     try {
         const { bookingId, cageId } = data;
@@ -332,4 +372,5 @@ module.exports = {
     confirmServiceRecord,
     getAllServiceRecord,
     getDetailServiceRecord,
+    staffCancelServiceRecord,
 };
