@@ -16,8 +16,14 @@ router.post(
 router.post(
     '/service/cancel',
     checkUserAuth,
-    checkPermissionUser(['CUSTOMER,"STAFF']),
+    checkPermissionUser(['CUSTOMER']),
     serviceRecordController.cancelServiceRecord,
+);
+router.post(
+    '/service/staff/cancel',
+    checkUserAuth,
+    checkPermissionUser(['STAFF']),
+    serviceRecordController.staffCancelServiceRecord,
 );
 router.get(
     '/service/:id',

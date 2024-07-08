@@ -86,6 +86,54 @@ const cancelOrder = async (data) => {
         const { orderId, reason } = data;
         const order = await _Order.findOne({ _id: orderId });
         if (order && order.status === 'Processing') {
+            for (let item of order.orderDetails) {
+                await _Product.findOneAndUpdate(
+                    { _id: item.product },
+                    { $inc: { quantity: +item.quantity } },
+                    { new: true },
+                );
+            }
+            order.status = 'Cancelled';
+            order.cancellation = {
+                date: Date.now(),
+                reason,
+            };
+            const newOrder = await order.save();
+            if (newOrder) {
+                return {
+                    status: 'success',
+                    message: 'Cancel order success !',
+                    data: '',
+                };
+            }
+        }
+
+        return {
+            status: 'error',
+            message: 'Cancel order fail !',
+            data: '',
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
+const staffCancelOrder = async (data) => {
+    try {
+        const { orderId, reason } = data;
+        const order = await _Order.findOne({ _id: orderId });
+        if (order.status === 'Processing' || order.status === 'In Transit') {
+            for (let item of order.orderDetails) {
+                await _Product.findOneAndUpdate(
+                    { _id: item.product },
+                    { $inc: { quantity: +item.quantity } },
+                    { new: true },
+                );
+            }
             order.status = 'Cancelled';
             order.cancellation = {
                 date: Date.now(),
@@ -356,4 +404,5 @@ module.exports = {
     confirmOrder,
     getOrder,
     getOrderHistory,
+    staffCancelOrder,
 };

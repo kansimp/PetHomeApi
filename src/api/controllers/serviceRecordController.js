@@ -32,6 +32,22 @@ const cancelServiceRecord = async (req, res) => {
         });
     }
 };
+const staffCancelServiceRecord = async (req, res) => {
+    try {
+        let data = await serviceRecordService.staffCancelServiceRecord(req.body);
+        return res.status(200).json({
+            status: data.status,
+            message: data.message,
+            data: data.data,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'error',
+            message: 'error from server',
+            data: '',
+        });
+    }
+};
 const confirmServiceRecord = async (req, res) => {
     try {
         let data = await serviceRecordService.confirmServiceRecord(req.body);
@@ -87,4 +103,5 @@ module.exports = {
     confirmServiceRecord,
     getAllServiceRecord,
     getDetailServiceRecord,
+    staffCancelServiceRecord,
 };
