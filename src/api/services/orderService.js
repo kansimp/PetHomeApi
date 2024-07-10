@@ -122,6 +122,35 @@ const cancelOrder = async (data) => {
         };
     }
 };
+const completedOrder = async (data) => {
+    try {
+        const { orderId } = data;
+        const order = await _Order.findOne({ _id: orderId });
+        if (order && order.status === 'In Transit') {
+            order.status = 'Completed';
+            const newOrder = await order.save();
+            if (newOrder) {
+                return {
+                    status: 'success',
+                    message: 'Complete order success !',
+                    data: '',
+                };
+            }
+        }
+        return {
+            status: 'error',
+            message: 'Order not found or order status is not InTransit !',
+            data: '',
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
 const staffCancelOrder = async (data) => {
     try {
         const { orderId, reason } = data;
@@ -405,4 +434,5 @@ module.exports = {
     getOrder,
     getOrderHistory,
     staffCancelOrder,
+    completedOrder,
 };

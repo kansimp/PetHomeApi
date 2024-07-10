@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+import _Image from './Image.model';
 
 const productSchema = new mongoose.Schema({
     name: {
@@ -6,7 +7,7 @@ const productSchema = new mongoose.Schema({
         require: true,
     },
     image: {
-        type: String,
+        type: _Image.schema,
         require: true,
     },
     des: {
@@ -28,6 +29,7 @@ const productSchema = new mongoose.Schema({
     },
     status: {
         type: String,
+        enum: ['In stock', 'Out of stock'],
         default: 'In stock',
     },
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'ProductCategory' },

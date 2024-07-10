@@ -168,11 +168,50 @@ const getPriceByProductId = async (id) => {
         console.log(error);
     }
 };
-
+const createProduct = async (req) => {
+    try {
+        const { path, filename } = req.file;
+        const { name, des, price, type, quantity, weight } = req.body;
+        const image = {
+            url: path,
+            public_id: filename,
+        };
+        const pet = await _Pet.create({
+            name,
+            species,
+            sex,
+            breed,
+            age,
+            image,
+            weight,
+        });
+        if (pet._id) {
+            await _User.findByIdAndUpdate(userId, { $push: { pets: pet._id } });
+            return {
+                status: 'success',
+                message: 'Pet created successfully !',
+                data: pet,
+            };
+        }
+        return {
+            status: 'error',
+            message: 'Pet created fail !',
+            data: '',
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
 module.exports = {
     getProductsByCategory,
     getProductsById,
     getProductsAndSortByPrice,
     getProductsByName,
     getPriceByProductId,
+    createProduct,
 };

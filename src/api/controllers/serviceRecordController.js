@@ -32,6 +32,38 @@ const cancelServiceRecord = async (req, res) => {
         });
     }
 };
+const inProgressServiceRecord = async (req, res) => {
+    try {
+        let data = await serviceRecordService.inProgressServiceRecord(req.body);
+        return res.status(200).json({
+            status: data.status,
+            message: data.message,
+            data: data.data,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'error',
+            message: 'error from server',
+            data: '',
+        });
+    }
+};
+const completedServiceRecord = async (req, res) => {
+    try {
+        let data = await serviceRecordService.completedServiceRecord(req.body);
+        return res.status(200).json({
+            status: data.status,
+            message: data.message,
+            data: data.data,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'error',
+            message: 'error from server',
+            data: '',
+        });
+    }
+};
 const staffCancelServiceRecord = async (req, res) => {
     try {
         let data = await serviceRecordService.staffCancelServiceRecord(req.body);
@@ -104,4 +136,6 @@ module.exports = {
     getAllServiceRecord,
     getDetailServiceRecord,
     staffCancelServiceRecord,
+    inProgressServiceRecord,
+    completedServiceRecord,
 };

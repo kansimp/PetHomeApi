@@ -32,6 +32,22 @@ const cancelOrder = async (req, res) => {
         });
     }
 };
+const completedOrder = async (req, res) => {
+    try {
+        let data = await orderService.completedOrder(req.body);
+        return res.status(200).json({
+            status: data.status,
+            message: data.message,
+            data: data.data,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'error',
+            message: 'error from server',
+            data: '',
+        });
+    }
+};
 const staffCancelOrder = async (req, res) => {
     try {
         let data = await orderService.staffCancelOrder(req.body);
@@ -104,4 +120,5 @@ module.exports = {
     getOrder,
     getOrderHistory,
     staffCancelOrder,
+    completedOrder,
 };
