@@ -92,6 +92,66 @@ const cancelServiceRecord = async (data) => {
         };
     }
 };
+const inProgressServiceRecord = async (data) => {
+    try {
+        const { serviceRecordId } = data;
+        const serviceRecord = await _ServiceRecords.findOne({ _id: serviceRecordId });
+        if (serviceRecord && serviceRecord.status === 'Processed') {
+            serviceRecord.status = 'In Progress';
+            const newserviceRecord = await serviceRecord.save();
+            if (newserviceRecord) {
+                return {
+                    status: 'success',
+                    message: 'In Progress service success !',
+                    data: '',
+                };
+            }
+        }
+
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: 'serviceRecord not found or status of serviceRecord is not Processed',
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
+const completedServiceRecord = async (data) => {
+    try {
+        const { serviceRecordId } = data;
+        const serviceRecord = await _ServiceRecords.findOne({ _id: serviceRecordId });
+        if (serviceRecord && serviceRecord.status === 'In Progress') {
+            serviceRecord.status = 'Completed';
+            const newserviceRecord = await serviceRecord.save();
+            if (newserviceRecord) {
+                return {
+                    status: 'success',
+                    message: 'Completed service success !',
+                    data: '',
+                };
+            }
+        }
+
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: 'serviceRecord not found or status of serviceRecord is not In Progress',
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
 const staffCancelServiceRecord = async (data) => {
     try {
         const { serviceRecordId, reason } = data;
@@ -373,4 +433,6 @@ module.exports = {
     getAllServiceRecord,
     getDetailServiceRecord,
     staffCancelServiceRecord,
+    inProgressServiceRecord,
+    completedServiceRecord,
 };

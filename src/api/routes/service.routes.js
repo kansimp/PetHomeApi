@@ -20,6 +20,18 @@ router.post(
     serviceRecordController.cancelServiceRecord,
 );
 router.post(
+    '/service/inProgress',
+    checkUserAuth,
+    checkPermissionUser(['STAFF']),
+    serviceRecordController.inProgressServiceRecord,
+);
+router.post(
+    '/service/completed',
+    checkUserAuth,
+    checkPermissionUser(['STAFF']),
+    serviceRecordController.completedServiceRecord,
+);
+router.post(
     '/service/staff/cancel',
     checkUserAuth,
     checkPermissionUser(['STAFF']),
