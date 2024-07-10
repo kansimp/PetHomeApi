@@ -80,6 +80,70 @@ const createProduct = async (req, res) => {
         });
     }
 };
+const updateProduct = async (req, res) => {
+    try {
+        let data = await productService.updateProduct(req.body);
+        return res.status(200).json({
+            status: data.status,
+            message: data.message,
+            data: data.data,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'error',
+            message: 'error from server',
+            data: '',
+        });
+    }
+};
+const disableProduct = async (req, res) => {
+    try {
+        let data = await productService.disableProduct(req.body);
+        return res.status(200).json({
+            status: data.status,
+            message: data.message,
+            data: data.data,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'error',
+            message: 'error from server',
+            data: '',
+        });
+    }
+};
+const unDisableProduct = async (req, res) => {
+    try {
+        let data = await productService.unDisableProduct(req.body);
+        return res.status(200).json({
+            status: data.status,
+            message: data.message,
+            data: data.data,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'error',
+            message: 'error from server',
+            data: '',
+        });
+    }
+};
+const createService = async (req, res) => {
+    try {
+        let data = await productService.createService(req.body);
+        return res.status(200).json({
+            status: data.status,
+            message: data.message,
+            data: data.data,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'error',
+            message: 'error from server',
+            data: '',
+        });
+    }
+};
 
 module.exports = {
     getProductsByCategory,
@@ -87,4 +151,8 @@ module.exports = {
     getProductsAndSortByPrice,
     getProductsByName,
     createProduct,
+    updateProduct,
+    disableProduct,
+    unDisableProduct,
+    createService,
 };

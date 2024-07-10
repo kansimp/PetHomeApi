@@ -17,6 +17,16 @@ router.post(
     upload.single('file'),
     productController.createProduct,
 );
+router.post(
+    '/products/addService',
+    checkUserAuth,
+    checkPermissionUser(['STAFF']),
+    upload.single('file'),
+    productController.createService,
+);
+router.put('/products', checkUserAuth, checkPermissionUser(['STAFF']), productController.updateProduct);
+router.post('/products/disable', checkUserAuth, checkPermissionUser(['STAFF']), productController.disableProduct);
+router.post('/products/unDisable', checkUserAuth, checkPermissionUser(['STAFF']), productController.unDisableProduct);
 router.get('/products/:id', productController.getProductsById);
 
 export default router;
