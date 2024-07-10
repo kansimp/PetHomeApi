@@ -218,6 +218,141 @@ const createProduct = async (req) => {
         };
     }
 };
+const createService = async (req) => {
+    try {
+        const { path, filename } = req.file;
+        const { name, des, price } = req.body;
+        const image = {
+            url: path,
+            public_id: filename,
+        };
+        const category = await _ProductCategory.findOne({ name: nameCategory, species });
+        if (category) {
+            const product = await _Product.findOne({ name });
+            if (product) {
+                return {
+                    status: 'error',
+                    message: 'Name of product is exist !',
+                    data: '',
+                };
+            }
+            const newProduct = await _Product.create({
+                name,
+                des,
+                price,
+                quantity: 1,
+                category: '665f0bc8c8e4653ac6b3c1ea',
+                image,
+                type: 'service',
+            });
+            if (newProduct) {
+                return {
+                    status: 'success',
+                    message: 'Service created successfully !',
+                    data: newProduct,
+                };
+            }
+        }
+
+        return {
+            status: 'error',
+            message: 'Create service fail !',
+            data: '',
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
+const updateProduct = async (data) => {
+    try {
+        const { productId, name, des, price, quantity } = data;
+        const newProduct = await _Product.findByIdAndUpdate(productId, { name, des, price, quantity }, { new: true });
+        if (newProduct) {
+            return {
+                status: 'success',
+                message: 'Update product successfully !',
+                data: '',
+            };
+        }
+        return {
+            status: 'error',
+            message: 'Can not find product !',
+            data: '',
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
+const disableProduct = async (data) => {
+    try {
+        const { productId } = data;
+        const newProduct = await _Product.findByIdAndUpdate(productId, { status: 'Disabled' }, { new: true });
+        if (newProduct) {
+            return {
+                status: 'success',
+                message: 'Disable product successfully !',
+                data: '',
+            };
+        }
+        return {
+            status: 'error',
+            message: 'Can not find product !',
+            data: '',
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
+const unDisableProduct = async (data) => {
+    try {
+        const { productId } = data;
+        const product = await _Product.findOne({ _id: productId });
+        if (product && product.status == 'Disabled') {
+            const quantity = product.quantity;
+            if (quantity > 0) {
+                product.status = 'In stock';
+            } else {
+                product.status = 'Out of stock';
+            }
+            const newProduct = await product.save();
+            if (newProduct) {
+                return {
+                    status: 'success',
+                    message: 'Undisable product successfully !',
+                    data: '',
+                };
+            }
+        }
+
+        return {
+            status: 'error',
+            message: 'Can not find product or status of product is not Disabled !',
+            data: '',
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
 module.exports = {
     getProductsByCategory,
     getProductsById,
@@ -225,4 +360,8 @@ module.exports = {
     getProductsByName,
     getPriceByProductId,
     createProduct,
+    updateProduct,
+    disableProduct,
+    unDisableProduct,
+    createService,
 };
