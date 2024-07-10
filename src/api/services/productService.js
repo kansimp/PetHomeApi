@@ -171,31 +171,42 @@ const getPriceByProductId = async (id) => {
 const createProduct = async (req) => {
     try {
         const { path, filename } = req.file;
-        const { name, des, price, type, quantity, weight } = req.body;
+        const { name, des, price, quantity, nameCategory, species } = req.body;
         const image = {
             url: path,
             public_id: filename,
         };
-        const pet = await _Pet.create({
-            name,
-            species,
-            sex,
-            breed,
-            age,
-            image,
-            weight,
-        });
-        if (pet._id) {
-            await _User.findByIdAndUpdate(userId, { $push: { pets: pet._id } });
-            return {
-                status: 'success',
-                message: 'Pet created successfully !',
-                data: pet,
-            };
+        const category = await _ProductCategory.findOne({ name: nameCategory, species });
+        if (category) {
+            const product = await _Product.findOne({ name });
+            if (product) {
+                return {
+                    status: 'error',
+                    message: 'Name of product is exist !',
+                    data: '',
+                };
+            }
+            const newProduct = await _Product.create({
+                name,
+                des,
+                price,
+                quantity,
+                category: category._id,
+                image,
+                type: 'product',
+            });
+            if (newProduct) {
+                return {
+                    status: 'success',
+                    message: 'Product created successfully !',
+                    data: newProduct,
+                };
+            }
         }
+
         return {
             status: 'error',
-            message: 'Pet created fail !',
+            message: 'Create product fail !',
             data: '',
         };
     } catch (error) {
