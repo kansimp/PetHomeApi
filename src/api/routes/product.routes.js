@@ -12,7 +12,6 @@ router.get('/products/sort', validateViewProductsAndSort, productController.getP
 router.get('/products/search', validateSearch, productController.getProductsByName);
 router.post(
     '/products',
-    validateSearch,
     checkUserAuth,
     checkPermissionUser(['STAFF']),
     upload.single('file'),
