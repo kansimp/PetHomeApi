@@ -21,7 +21,6 @@ const getProductsByCategory = async (data) => {
                 .find({ category: category._id, type })
                 .select('_id name image des price quantity status');
         }
-
         if (products.length > 0) {
             return {
                 status: 'success',
@@ -172,10 +171,7 @@ const createProduct = async (req) => {
     try {
         const { path, filename } = req.file;
         const { name, des, price, quantity, nameCategory, species } = req.body;
-        const image = {
-            url: path,
-            public_id: filename,
-        };
+        const image = path;
         const category = await _ProductCategory.findOne({ name: nameCategory, species });
         if (category) {
             const product = await _Product.findOne({ name });
@@ -222,10 +218,7 @@ const createService = async (req) => {
     try {
         const { path, filename } = req.file;
         const { name, des, price } = req.body;
-        const image = {
-            url: path,
-            public_id: filename,
-        };
+        const image = path;
         const category = await _ProductCategory.findOne({ name: nameCategory, species });
         if (category) {
             const product = await _Product.findOne({ name });
