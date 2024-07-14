@@ -41,6 +41,7 @@ const createOrder = async (data) => {
                 payment: {
                     datePayment: Date.now(),
                     paymentMethod: paymentMethod,
+                    status: 'PAID',
                 },
                 orderDetails: orderDetails,
                 totalPrice: totalPrice,
@@ -128,6 +129,7 @@ const completedOrder = async (data) => {
         const order = await _Order.findOne({ _id: orderId });
         if (order && order.status === 'In Transit') {
             order.status = 'Completed';
+            order.payment.status = 'PAID';
             const newOrder = await order.save();
             if (newOrder) {
                 return {

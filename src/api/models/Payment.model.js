@@ -7,6 +7,11 @@ const paymentSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    status: {
+        type: String,
+        enum: ['PAID', 'UNPAID'],
+        default: 'UNPAID',
+    },
 });
 
 const _Payment = mongoose.model('Payment', paymentSchema);
