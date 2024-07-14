@@ -10,7 +10,7 @@ router.get('/service', checkUserAuth, checkPermissionUser(['STAFF']), serviceRec
 router.post(
     '/service/serviceHistory',
     checkUserAuth,
-    checkPermissionUser(['STAFF']),
+    checkPermissionUser(['CUSTOMER']),
     serviceRecordController.getServiceHistory,
 );
 router.post(
