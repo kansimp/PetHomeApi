@@ -127,6 +127,11 @@ const completedServiceRecord = async (data) => {
         const { serviceRecordId } = data;
         const serviceRecord = await _ServiceRecords.findOne({ _id: serviceRecordId });
         if (serviceRecord && serviceRecord.status === 'In Progress') {
+            const pet = await _Pet.findOne({ serviceRecords: serviceRecord._id });
+            if (pet) {
+                pet.serviceStatus = 'inactive';
+                await pet.save();
+            }
             serviceRecord.status = 'Completed';
             const newserviceRecord = await serviceRecord.save();
             if (newserviceRecord) {
