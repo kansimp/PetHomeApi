@@ -377,7 +377,7 @@ const getAllServiceRecord = async (data) => {
         }
         return {
             status: 'error',
-            message: 'Cancel service fail !',
+            message: 'get service fail !',
             data: '',
         };
     } catch (error) {
@@ -431,12 +431,22 @@ const getServiceHistory = async (data) => {
         const user = await _User
             .findOne({ _id: userId })
             .select('pets')
-            .populate({ path: 'pets', select: 'name', populate: { path: 'serviceRecords' } });
+            .populate({ path: 'pets', select: 'name', populate: { path: 'serviceRecords', populate: 'product' } });
         if (user) {
+            const booking = [];
+            for (let i = 0; i < user.pets.length; i++) {
+                for (let j = 0; j < user.pets[i].serviceRecords.length; j++) {
+                    let b = {
+                        petName: user.pets[i].name,
+                        serviceRecord: user.pets[i].serviceRecords[j],
+                    };
+                    booking.push(b);
+                }
+            }
             return {
                 status: 'success',
                 message: 'Get booking service history successfully !',
-                data: user.pets,
+                data: booking,
             };
         }
 
