@@ -130,7 +130,7 @@ const unDisableProduct = async (req, res) => {
 };
 const createService = async (req, res) => {
     try {
-        let data = await productService.createService(req.body);
+        let data = await productService.createService(req);
         return res.status(200).json({
             status: data.status,
             message: data.message,

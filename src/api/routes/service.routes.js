@@ -8,6 +8,12 @@ router.post('/service', checkUserAuth, checkPermissionUser(['CUSTOMER']), servic
 router.get('/service', checkUserAuth, checkPermissionUser(['STAFF']), serviceRecordController.getAllServiceRecord);
 
 router.post(
+    '/service/serviceHistory',
+    checkUserAuth,
+    checkPermissionUser(['STAFF']),
+    serviceRecordController.getServiceHistory,
+);
+router.post(
     '/service/confirm',
     checkUserAuth,
     checkPermissionUser(['STAFF']),
