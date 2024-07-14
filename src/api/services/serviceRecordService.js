@@ -431,7 +431,7 @@ const getServiceHistory = async (data) => {
         const user = await _User
             .findOne({ _id: userId })
             .select('pets')
-            .populate({ path: 'pets', select: 'name', populate: { path: 'serviceRecords' } });
+            .populate({ path: 'pets', select: 'name', populate: { path: 'serviceRecords', populate: 'product' } });
         if (user) {
             return {
                 status: 'success',
