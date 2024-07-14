@@ -425,6 +425,35 @@ const getDetailServiceRecord = async (data) => {
         };
     }
 };
+const getServiceHistory = async (data) => {
+    try {
+        const { userId } = data;
+        const user = await _User
+            .findOne({ _id: userId })
+            .select('pets')
+            .populate({ path: 'pets', select: 'name', populate: { path: 'serviceRecords' } });
+        if (user) {
+            return {
+                status: 'success',
+                message: 'Get booking service history successfully !',
+                data: user.pets,
+            };
+        }
+
+        return {
+            status: 'error',
+            message: 'User ID not found !',
+            data: '',
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
 
 module.exports = {
     createServiceRecord,
@@ -435,4 +464,5 @@ module.exports = {
     staffCancelServiceRecord,
     inProgressServiceRecord,
     completedServiceRecord,
+    getServiceHistory,
 };

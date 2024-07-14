@@ -128,6 +128,22 @@ const getDetailServiceRecord = async (req, res) => {
         });
     }
 };
+const getServiceHistory = async (req, res) => {
+    try {
+        let data = await serviceRecordService.getServiceHistory(req.body);
+        return res.status(200).json({
+            status: data.status,
+            message: data.message,
+            data: data.data,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'error',
+            message: 'error from server',
+            data: '',
+        });
+    }
+};
 
 module.exports = {
     createServiceRecord,
@@ -138,4 +154,5 @@ module.exports = {
     staffCancelServiceRecord,
     inProgressServiceRecord,
     completedServiceRecord,
+    getServiceHistory,
 };

@@ -219,32 +219,29 @@ const createService = async (req) => {
         const { path, filename } = req.file;
         const { name, des, price } = req.body;
         const image = path;
-        const category = await _ProductCategory.findOne({ name: nameCategory, species });
-        if (category) {
-            const product = await _Product.findOne({ name });
-            if (product) {
-                return {
-                    status: 'error',
-                    message: 'Name of product is exist !',
-                    data: '',
-                };
-            }
-            const newProduct = await _Product.create({
-                name,
-                des,
-                price,
-                quantity: 1,
-                category: '665f0bc8c8e4653ac6b3c1ea',
-                image,
-                type: 'service',
-            });
-            if (newProduct) {
-                return {
-                    status: 'success',
-                    message: 'Service created successfully !',
-                    data: newProduct,
-                };
-            }
+        const product = await _Product.findOne({ name });
+        if (product) {
+            return {
+                status: 'error',
+                message: 'Name of product is exist !',
+                data: '',
+            };
+        }
+        const newProduct = await _Product.create({
+            name,
+            des,
+            price,
+            quantity: 1,
+            category: '665f0bc8c8e4653ac6b3c1ea',
+            image,
+            type: 'service',
+        });
+        if (newProduct) {
+            return {
+                status: 'success',
+                message: 'Service created successfully !',
+                data: newProduct,
+            };
         }
 
         return {
