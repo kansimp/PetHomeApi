@@ -25,7 +25,33 @@ const getUserById = async (data) => {
         };
     }
 };
+const disableUserById = async (data) => {
+    try {
+        const { id } = data;
+        const user = await _User.findByIdAndUpdate(id, { isDisabled: false }, { new: true });
+        if (user) {
+            return {
+                status: 'success',
+                message: 'Disable user success !',
+                data: user,
+            };
+        }
+        return {
+            status: 'error',
+            message: 'can not find user !',
+            data: '',
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
 
 module.exports = {
     getUserById,
+    disableUserById,
 };
