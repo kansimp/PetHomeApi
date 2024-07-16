@@ -28,14 +28,25 @@ const getUserById = async (data) => {
 const disableUserById = async (data) => {
     try {
         const { id } = data;
-        const user = await _User.findByIdAndUpdate(id, { isDisabled: true }, { new: true });
-        if (user) {
+        const user = await _User.findOne({ _id: id });
+        if (user.isDisabled == true) {
+            user.isDisabled = false;
+            await user.save();
+            return {
+                status: 'success',
+                message: 'Disable user success !',
+                data: user,
+            };
+        } else if (user.isDisabled == false) {
+            user.isDisabled = true;
+            await user.save();
             return {
                 status: 'success',
                 message: 'Disable user success !',
                 data: user,
             };
         }
+
         return {
             status: 'error',
             message: 'can not find user !',
@@ -50,8 +61,26 @@ const disableUserById = async (data) => {
         };
     }
 };
+const getAllUser = async (data) => {
+    try {
+        const users = await _User.find({});
+        return {
+            status: 'success',
+            message: 'get all user successfully',
+            data: users,
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
 
 module.exports = {
     getUserById,
     disableUserById,
+    getAllUser,
 };
