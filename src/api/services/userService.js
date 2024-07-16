@@ -28,7 +28,7 @@ const getUserById = async (data) => {
 const disableUserById = async (data) => {
     try {
         const { id } = data;
-        const user = await _User.findByIdAndUpdate(id, { isDisabled: false }, { new: true });
+        const user = await _User.findByIdAndUpdate(id, { isDisabled: true }, { new: true });
         if (user) {
             return {
                 status: 'success',
