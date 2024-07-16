@@ -1,8 +1,8 @@
-import userService from '../services/userService';
+import dashboardService from '../services/dashboardService';
 
-const getUserById = async (req, res) => {
+const getRevenueByDay = async (req, res) => {
     try {
-        let data = await userService.getUserById(req.params);
+        let data = await dashboardService.getRevenueByDay(req.query);
         return res.status(200).json({
             status: data.status,
             message: data.message,
@@ -17,9 +17,9 @@ const getUserById = async (req, res) => {
         });
     }
 };
-const disableUserById = async (req, res) => {
+const getRevenueByMonth = async (req, res) => {
     try {
-        let data = await userService.disableUserById(req.query);
+        let data = await dashboardService.getRevenueByMonth(req.query);
         return res.status(200).json({
             status: data.status,
             message: data.message,
@@ -36,6 +36,6 @@ const disableUserById = async (req, res) => {
 };
 
 module.exports = {
-    getUserById,
-    disableUserById,
+    getRevenueByDay,
+    getRevenueByMonth,
 };

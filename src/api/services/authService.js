@@ -170,6 +170,13 @@ const loginUser = async (data) => {
         const user = await checkUserExist(data.email);
 
         if (user) {
+            if (user.isDisabled == false) {
+                return {
+                    status: 'error',
+                    message: 'Your account is disabled !',
+                    data: '',
+                };
+            }
             const payload = {
                 email: user.email,
                 role: user.role,
