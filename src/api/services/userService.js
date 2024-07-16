@@ -63,7 +63,8 @@ const disableUserById = async (data) => {
 };
 const getAllUser = async (data) => {
     try {
-        const users = await _User.find({});
+        const users = await _User.find({ role: { $ne: 'ADMIN' } });
+
         return {
             status: 'success',
             message: 'get all user successfully',
