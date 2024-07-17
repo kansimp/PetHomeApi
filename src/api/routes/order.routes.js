@@ -19,6 +19,7 @@ router.post('/orders/completed', checkUserAuth, checkPermissionUser(['STAFF']), 
 router.post('/orders/staff/cancel', checkUserAuth, checkPermissionUser(['STAFF']), orderController.staffCancelOrder);
 router.post('/orders/confirm', checkUserAuth, checkPermissionUser(['STAFF']), orderController.confirmOrder);
 router.get('/orders', checkUserAuth, checkPermissionUser(['STAFF']), orderController.getOrder);
+router.get('/orders:id', checkUserAuth, checkPermissionUser(['CUSTOMER', 'STAFF']), orderController.getOrderDetail);
 router.get('/orders/history', checkUserAuth, checkPermissionUser(['CUSTOMER']), orderController.getOrderHistory);
 
 export default router;

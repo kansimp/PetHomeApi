@@ -324,7 +324,7 @@ const unDisableProduct = async (data) => {
             if (quantity > 0) {
                 product.status = 'In stock';
             } else {
-                product.status = 'Out of stock';
+                product.status = 'out of stock';
             }
             const newProduct = await product.save();
             if (newProduct) {

@@ -112,6 +112,22 @@ const getOrderHistory = async (req, res) => {
         });
     }
 };
+const getOrderDetail = async (req, res) => {
+    try {
+        let data = await orderService.getOrderDetail(req.params);
+        return res.status(200).json({
+            status: data.status,
+            message: data.message,
+            data: data.data,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 'error',
+            message: 'error from server',
+            data: '',
+        });
+    }
+};
 
 module.exports = {
     createOrder,
@@ -121,4 +137,5 @@ module.exports = {
     getOrderHistory,
     staffCancelOrder,
     completedOrder,
+    getOrderDetail,
 };

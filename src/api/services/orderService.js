@@ -262,6 +262,36 @@ const getOrder = async (data) => {
         };
     }
 };
+const getOrderDetail = async (data) => {
+    try {
+        const { id } = data;
+        const order = await _Order.findOne({ _id: id }).populate({
+            path: 'orderDetails',
+            populate: {
+                path: 'product',
+            },
+        });
+        if (order) {
+            return {
+                status: 'success',
+                message: 'get order detail success !',
+                data: order,
+            };
+        }
+        return {
+            status: 'error',
+            message: 'can not find order !',
+            data: '',
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            status: 'error',
+            message: 'something was wrong in service',
+            data: '',
+        };
+    }
+};
 const getOrderHistory = async (data) => {
     try {
         const { userId } = data;
@@ -437,4 +467,5 @@ module.exports = {
     getOrderHistory,
     staffCancelOrder,
     completedOrder,
+    getOrderDetail,
 };
