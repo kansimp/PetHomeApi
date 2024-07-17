@@ -267,7 +267,7 @@ const updateProduct = async (data) => {
                 newProduct.status = 'In stock';
                 await newProduct.save();
             } else if (newProduct.quantity == 0) {
-                newProduct.status = 'Out of stock';
+                newProduct.status = 'out of stock';
                 await newProduct.save();
             }
             return {

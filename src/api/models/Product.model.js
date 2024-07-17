@@ -29,7 +29,7 @@ const productSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['In stock', 'Out of stock', 'Disabled'],
+        enum: ['In stock', 'out of stock', 'Disabled'],
         default: 'In stock',
     },
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'ProductCategory' },
