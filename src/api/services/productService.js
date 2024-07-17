@@ -263,6 +263,13 @@ const updateProduct = async (data) => {
         const { productId, name, des, price, quantity } = data;
         const newProduct = await _Product.findByIdAndUpdate(productId, { name, des, price, quantity }, { new: true });
         if (newProduct) {
+            if (newProduct.quantity > 0) {
+                newProduct.status = 'In stock';
+                await newProduct.save();
+            } else if (newProduct.quantity == 0) {
+                newProduct.status = 'Out of stock';
+                await newProduct.save();
+            }
             return {
                 status: 'success',
                 message: 'Update product successfully !',
